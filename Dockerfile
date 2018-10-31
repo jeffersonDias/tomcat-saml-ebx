@@ -9,6 +9,7 @@ FROM tomcat:9.0.11-jre10
 ENV EBX_HOME /data/app/ebx
 RUN mkdir -p ${EBX_HOME}
 
+ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
 RUN keytool -genkey -noprompt \
@@ -35,7 +36,7 @@ COPY --from=mickaelgermemont/ebx:5.8.1.1067-0027 /data/ebx/ebx.software/webapps/
 ### PROJECT
 
 COPY ebx.properties /data/app/ebx.properties
-ENV EBX_OPTS="-Debx.home=${EBX_HOME} -Debx.properties=/data/app/ebx.properties"
+ENV EBX_OPTS "-Debx.home=${EBX_HOME} -Debx.properties=/data/app/ebx.properties"
 
 COPY saml.war $CATALINA_HOME/webapps/
 COPY samlconf.properties $CATALINA_HOME/saml/
@@ -47,7 +48,7 @@ COPY libs/*.jar $CATALINA_HOME/lib/
 ###
 ### startup parameters
 
-ENV JAVA_OPTS="${EBX_OPTS} -Dsaml.home=$CATALINA_HOME/saml ${JAVA_OPTS}"
+ENV JAVA_OPTS "${EBX_OPTS} -Dsaml.home=$CATALINA_HOME/saml ${JAVA_OPTS}"
 ENV CATALINA_OPTS ""
 
 ###
