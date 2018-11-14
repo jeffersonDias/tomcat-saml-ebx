@@ -2,24 +2,31 @@
 
 ## requirement
 
-* have ./saml.war
-* have libs/PsDirectoryLib.jar
-* have libs/gson.jar
+* have ./saml.war, see https://github.com/mickaelgermemont/ebx-javaweb-saml
+* have libs/PsDirectoryLib.jar, see https://s3.amazonaws.com/on-ps-custom-directory/PsDirectoryLib/PsDirectoryLib-2.18.8-SNAPSHOT.jar
+* have libs/gson-2.8.5.jar
 * have UnlimitedJCEPolicyJDK8 folder, see https://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
 
 ## build docker image
 
 ```
-docker build -t ebx-saml:5.8.1-tomcat9.0.11-jre10 .
+docker build --build-arg EBXVERSION=5.8.1.1067-0029 --build-arg EBXADDONSVERSION=5.8.1.1067-0029_addons_3.20.6.0036-0022 -t ebx-saml:5.8.1-tomcat9.0.11-jre10 .
 ```
 
 ## start app
 
 ```
-docker run --rm -p 8843:8843 --mount type=volume,src=ebx1,dst=/data/app/ebx -e "CATALINA_OPTS=-DebxLicense=$EBXLICENSE" --name tomcat_ebx_saml ebx-saml:5.8.1-tomcat9.0.11-jre10
+docker run --rm -p 8843:8843 -p 8080:8080 --mount type=volume,src=ebx11,dst=/data/app/ebx -e "CATALINA_OPTS=-DebxLicense=$EBXLICENSE" --name tomcat_ebx_saml ebx-saml:5.8.1-tomcat9.0.11-jre10
 
 open https://localhost:8843/saml
+open http://localhost:8080/saml
 ```
+
+## SAML Configuration
+
+see file samlconf.properties
+
+see https://s3.amazonaws.com/on-ps-custom-directory/saml/template/EBX+SSO+with+SAML.pdf
 
 ## start container and use command-line
 
